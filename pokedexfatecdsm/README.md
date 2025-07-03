@@ -1,16 +1,59 @@
-# pokedexfatecdsm
+# Pokédex FATEC DSM
 
-A new Flutter project.
+Um aplicativo Flutter integrado com API Node.js para gerenciar pokémons e usuários.
 
-## Getting Started
+## Estrutura do Projeto
 
-This project is a starting point for a Flutter application.
+```text
+pokedexfatecdsm/
+├── lib/                    # Código fonte Flutter
+│   ├── config/            # Configurações da API
+│   ├── models/            # Modelos de dados
+│   ├── database_helper.dart
+│   ├── tela_login.dart
+│   ├── tela_home.dart
+│   └── main.dart
+├── nodejsAPI/             # API Node.js + MySQL
+│   ├── server.js
+│   ├── database.js
+│   ├── setup.js
+│   └── package.json
+├── assets/images/         # Imagens dos pokémons
+└── CONFIGURACAO_API.md    # Guia de configuração da API
+```
 
-A few resources to get you started if this is your first Flutter project:
+## Configuração e Execução
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### 1. Configurar a API Node.js
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+cd nodejsAPI
+npm install
+node setup.js
+node server.js
+```
+
+### 2. Configurar o Flutter
+
+```bash
+flutter pub get
+flutter run
+```
+
+### 3. Configurar URL da API
+
+Consulte o arquivo `CONFIGURACAO_API.md` para instruções detalhadas sobre como configurar a URL da API para diferentes ambientes (emulador, dispositivo físico, web).
+
+## Funcionalidades
+
+- 🔐 Login e logout de usuários
+- 🔄 Sincronização entre SQLite local e MySQL
+- 📱 Interface moderna e responsiva
+- 🎯 Gerenciamento de pokémons
+- 🌐 API REST completa
+
+## Recursos Adicionais
+
+- [Documentação Flutter](https://docs.flutter.dev/)
+- [Guia Node.js](https://nodejs.org/docs/)
+- [MySQL Documentation](https://dev.mysql.com/doc/)
