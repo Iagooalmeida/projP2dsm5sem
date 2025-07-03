@@ -1,9 +1,9 @@
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'models/usuario.dart';
 import 'models/pokemon.dart';
+import 'config/api_config.dart';
 
 class DatabaseHelper {
   static final DatabaseHelper _instance = DatabaseHelper._internal();
@@ -43,7 +43,7 @@ class DatabaseHelper {
           )
         ''');
 
-        await db.insert('users', {'email': 'fatec@pokemon.com', 'senha': 'pikachu'});
+        await db.insert('usuarios', {'email': 'fatec@pokemon.com', 'senha': 'pikachu'});
 
         List<Map<String, dynamic>> pokemons = [
           {'id': 1, 'nome': 'Bulbasaur', 'tipo': 'Grass/Poison', 'imagem': 'assets/images/bulbasaur.png'},
@@ -68,7 +68,7 @@ class DatabaseHelper {
   Future<Usuario?> getUser(String email, String senha) async {
     final db = await database;
     final result = await db.query(
-      'users',
+      'usuarios',
       where: 'email = ? AND senha = ?',
       whereArgs: [email, senha],
     );
@@ -98,20 +98,24 @@ class DatabaseHelper {
 
     final usuarios = await db.query('usuarios');
     for (var usuario in usuarios) {
-      await http.post(
-        Uri.parse('https://url-do-servidor.com/api/sync_user.php'),
+      final response = await http.post(
+        Uri.parse(ApiConfig.syncUserUrl),
         body: {
           'id': usuario['id'].toString(),
           'email': usuario['email'].toString(),
           'senha': usuario['senha'].toString(),
         },
       );
+      
+      if (response.statusCode != 200) {
+        throw Exception('Erro ao sincronizar usuário: ${response.body}');
+      }
     }
 
     final pokemons = await db.query('pokemons');
     for (var p in pokemons) {
-      await http.post(
-        Uri.parse('https://url-do-servidor.com/api/sync_pokemon.php'),
+      final response = await http.post(
+        Uri.parse(ApiConfig.syncPokemonUrl),
         body: {
           'id': p['id'].toString(),
           'nome': p['nome'].toString(),
@@ -119,6 +123,10 @@ class DatabaseHelper {
           'imagem': p['imagem'].toString().split('/').last,
         },
       );
+      
+      if (response.statusCode != 200) {
+        throw Exception('Erro ao sincronizar pokemon: ${response.body}');
+      }
     }
   }
 }

@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
       title: 'Pokémon Fatec - Login',
       theme: ThemeData(primarySwatch: Colors.blue),
       home: const TelaLogin(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
